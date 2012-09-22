@@ -1,0 +1,28 @@
+
+
+WHAT?
+====================================================================
+Jsb (Javascript Builder) is a small dsl written in Java to generate
+Javascript.
+
+
+
+WHY?
+====================================================================
+I'm not sure. You probably shouldn't use this and stick to writing
+javascript in.. javascript. However, if you do for some reason need
+to generate javascript at runtime from Java, then using this might
+be marginally better than embedding js code in your java files.
+
+
+
+USAGE EXAMPLES
+====================================================================
+Look at the tests for examples.
+
+
+
+CAVEAT
+====================================================================
+I've never actually used this myself and it's pretty quick-n-dirty.
+Use at your own peril.
