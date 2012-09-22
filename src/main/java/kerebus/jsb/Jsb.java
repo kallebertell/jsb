@@ -10,16 +10,19 @@ package kerebus.jsb;
 public class Jsb {
 
     private JsStringBuilder sb;
+
     private Jsb outerScope;
+	private String scopeArgs;
 
     private Jsb() {
-        this(null);
+        this(null, null);
     }
 
-    private Jsb(Jsb outerScope) {
+    private Jsb(Jsb outerScope, String scopeArgs) {
         this.outerScope = outerScope;
-        sb = new JsStringBuilder();
-    }
+        this.sb = new JsStringBuilder();
+    	this.scopeArgs = scopeArgs;
+	}
 
     public static Jsb jsb() {
         return new Jsb();
@@ -45,12 +48,22 @@ public class Jsb {
 
     public String end() {
         if (outerScope != null) {
-            return sb.prepend("(function() {\n")
-					.append("})()").nl()
+			JsStringBuilder scopeDeclartion = new JsStringBuilder();
+			scopeDeclartion.append("(function(").append(getScopeArgs()).append(") {").nl();
+            return sb.prepend(scopeDeclartion.toString())
+					.append("})(").append(getScopeArgs()).append(")").nl()
 					.toString();
         }
         return sb.toString();
     }
+
+	private String getScopeArgs() {
+		if (scopeArgs == null) {
+			return "";
+		}
+
+		return scopeArgs;
+	}
 
     public Jsb endScope() {
         if (outerScope == null) {
@@ -71,8 +84,12 @@ public class Jsb {
 	}
 
     public Jsb scope() {
-        return new Jsb(this);
+        return new Jsb(this, null);
     }
+
+	public Jsb scope(String args) {
+		return new Jsb(this, args);
+	}
 
 	public IfScope iff(String condition, Jsb blockScope) {
 		return new IfScope(this, blockScope, condition);

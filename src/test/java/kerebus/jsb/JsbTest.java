@@ -28,6 +28,22 @@ public class JsbTest {
 	}
 
 	@Test
+	public void shouldPassArgsToScope() {
+		String js = jsb()
+				.declareVar("x", "123")
+				.scope("x, $")
+				.appendLn("$('foo').bar(x);")
+				.endScope()
+				.end();
+
+		assertEquals(
+				"var x = 123;\n" +
+				"(function(x, $) {\n" +
+					"$('foo').bar(x);\n" +
+				"})(x, $)\n", js);
+	}
+
+	@Test
 	public void shouldCreateInnerScope() {
 		String js = jsb()
 				.scope()
