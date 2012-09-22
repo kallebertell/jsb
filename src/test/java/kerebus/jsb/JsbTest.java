@@ -17,7 +17,7 @@ public class JsbTest {
 	public void shouldCreateScope() {
 		String js = jsb()
 				.scope()
-				.declareVar("x")
+					.declareVar("x")
 				.endScope()
 				.end();
 
@@ -32,14 +32,14 @@ public class JsbTest {
 		String js = jsb()
 				.declareVar("x", "123")
 				.scope("x, $")
-				.appendLn("$('foo').bar(x);")
+					.appendLn("$('foo').bar(x);")
 				.endScope()
 				.end();
 
 		assertEquals(
 				"var x = 123;\n" +
 				"(function(x, $) {\n" +
-					"$('foo').bar(x);\n" +
+				"$('foo').bar(x);\n" +
 				"})(x, $)\n", js);
 	}
 
@@ -49,7 +49,7 @@ public class JsbTest {
 				.scope()
 					.scope()
 						.scope()
-						.appendLn("alert('huhuu');")
+							.appendLn("alert('huhuu');")
 						.endScope()
 					.endScope()
 				.endScope()
@@ -59,7 +59,7 @@ public class JsbTest {
 				"(function() {\n" +
 					"(function() {\n" +
 						"(function() {\n" +
-						"alert('huhuu');\n" +
+							"alert('huhuu');\n" +
 						"})()\n" +
 					"})()\n" +
 				"})()\n", js);
@@ -81,12 +81,12 @@ public class JsbTest {
 	@Test
 	public void shouldDoIfClause() {
 		String js = jsb()
-			.declareVar("x")
-			.assign("13").to("x")
-			.iff("x === 13",
-				jsb("console.log(x);"))
-			.endIf()
-			.end();
+				.declareVar("x")
+				.assign("13").to("x")
+				.iff("x === 13",
+						jsb("console.log(x);"))
+				.endIf()
+				.end();
 
 
 		assertEquals("var x;\nx = 13;\nif (x === 13) {\nconsole.log(x);\n}\n", js);
@@ -97,9 +97,9 @@ public class JsbTest {
 		String js = jsb()
 				.declareVar("x", "13")
 				.iff("x === 13",
-					jsb("console.log(x);"))
+						jsb("console.log(x);"))
 				.elsee(
-					jsb("console.log('foo!');"))
+						jsb("console.log('foo!');"))
 				.endIf()
 				.end();
 
@@ -120,9 +120,9 @@ public class JsbTest {
 		String js = jsb()
 				.declareVar("x", "13")
 				.iff("x === 13",
-					jsb("console.log(x);"))
+						jsb("console.log(x);"))
 				.elseIf("x < 3",
-					jsb("console.log('foo!');"))
+						jsb("console.log('foo!');"))
 				.endIf()
 				.end();
 
@@ -142,11 +142,11 @@ public class JsbTest {
 		String js = jsb()
 				.declareVar("x", "13")
 				.iff("x === 13",
-					"console.log(x);")
+						"console.log(x);")
 				.elseIf("x < 3",
-					"console.log('foo!');")
+						"console.log('foo!');")
 				.elsee(
-					"console.log('!');")
+						"console.log('!');")
 				.endIf()
 				.end();
 
@@ -167,8 +167,8 @@ public class JsbTest {
 	@Test
 	public void shouldUseIfShortcut() {
 		String js = jsb()
-						.ifThen("true", "alert('woo');")
-					.end();
+				.ifThen("true", "alert('woo');")
+				.end();
 
 		assertEquals(
 				"if (true) {\n" +
@@ -180,8 +180,8 @@ public class JsbTest {
 	public void shouldDeclareFunc() {
 		String js = jsb()
 				.declareFunc("foo(a, bar, c)", jsb()
-					.assign("12").to("a")
-					.append("alert('a is '+a+');"))
+						.assign("12").to("a")
+						.append("alert('a is '+a+');"))
 				.end();
 
 		assertEquals(

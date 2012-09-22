@@ -4,38 +4,38 @@ package kerebus.jsb;
  * Javascript Builder.
  * A small dsl for building javascript at runtime in Java.
  * It's recommended you use static imports.
- *
+ * <p/>
  * import static kerebus.jsb.Jsb.*;
  */
 public class Jsb {
 
-    private JsStringBuilder sb;
+	private JsStringBuilder sb;
 
-    private Jsb outerScope;
+	private Jsb outerScope;
 	private String scopeArgs;
 
-    private Jsb() {
-        this(null, null);
-    }
-
-    private Jsb(Jsb outerScope, String scopeArgs) {
-        this.outerScope = outerScope;
-        this.sb = new JsStringBuilder();
-    	this.scopeArgs = scopeArgs;
+	private Jsb() {
+		this(null, null);
 	}
 
-    public static Jsb jsb() {
-        return new Jsb();
-    }
+	private Jsb(Jsb outerScope, String scopeArgs) {
+		this.outerScope = outerScope;
+		this.sb = new JsStringBuilder();
+		this.scopeArgs = scopeArgs;
+	}
+
+	public static Jsb jsb() {
+		return new Jsb();
+	}
 
 	public static Jsb jsb(String js) {
 		return new Jsb().append(js);
 	}
 
-    public Jsb declareVar(String varName) {
-        sb.append("var ").append(varName).append(";").nl();
-        return this;
-    }
+	public Jsb declareVar(String varName) {
+		sb.append("var ").append(varName).append(";").nl();
+		return this;
+	}
 
 	public Jsb declareVar(String varName, String value) {
 		sb.append("var ").append(varName).append(" = ").append(value).append(";").nl();
@@ -46,16 +46,16 @@ public class Jsb {
 		return new Assignment(this, value);
 	}
 
-    public String end() {
-        if (outerScope != null) {
-			JsStringBuilder scopeDeclartion = new JsStringBuilder();
-			scopeDeclartion.append("(function(").append(getScopeArgs()).append(") {").nl();
-            return sb.prepend(scopeDeclartion.toString())
+	public String end() {
+		if (outerScope != null) {
+			JsStringBuilder scopeDeclaration = new JsStringBuilder();
+			scopeDeclaration.append("(function(").append(getScopeArgs()).append(") {").nl();
+			return sb.prepend(scopeDeclaration.toString())
 					.append("})(").append(getScopeArgs()).append(")").nl()
 					.toString();
-        }
-        return sb.toString();
-    }
+		}
+		return sb.toString();
+	}
 
 	private String getScopeArgs() {
 		if (scopeArgs == null) {
@@ -65,27 +65,27 @@ public class Jsb {
 		return scopeArgs;
 	}
 
-    public Jsb endScope() {
-        if (outerScope == null) {
-            throw new RuntimeException("Can't end top level scope.");
-        }
+	public Jsb endScope() {
+		if (outerScope == null) {
+			throw new RuntimeException("Can't end top level scope.");
+		}
 
-        return outerScope.append(this.end());
-    }
+		return outerScope.append(this.end());
+	}
 
-    public Jsb append(String str) {
-        sb.append(str);
-        return this;
-    }
+	public Jsb append(String str) {
+		sb.append(str);
+		return this;
+	}
 
 	public Jsb appendLn(String str) {
 		sb.append(str).nl();
 		return this;
 	}
 
-    public Jsb scope() {
-        return new Jsb(this, null);
-    }
+	public Jsb scope() {
+		return new Jsb(this, null);
+	}
 
 	public Jsb scope(String args) {
 		return new Jsb(this, args);
@@ -108,7 +108,6 @@ public class Jsb {
 	}
 
 
-
 	private static class FuncScope {
 		String funcDeclaration;
 		Jsb funcScope;
@@ -129,7 +128,6 @@ public class Jsb {
 	}
 
 
-
 	public static class IfScope {
 		Jsb context;
 		String condition;
@@ -148,7 +146,7 @@ public class Jsb {
 		}
 
 		public Jsb endIf() {
-			context.appendLn(getIfStr() +" ("+condition+") {");
+			context.appendLn(getIfStr() + " (" + condition + ") {");
 			context.appendLn(blockScope.end());
 			context.appendLn("}");
 			return context;
@@ -176,7 +174,6 @@ public class Jsb {
 	}
 
 
-
 	public static class ElseScope {
 
 		private Jsb context;
@@ -186,7 +183,7 @@ public class Jsb {
 			this.context = context;
 			this.blockScope = blockScope;
 		}
-		
+
 		public Jsb endIf() {
 			context.appendLn("else {");
 			context.appendLn(blockScope.end());
@@ -196,20 +193,19 @@ public class Jsb {
 	}
 
 
-
 	public static class Assignment {
-        Jsb context;
-        String value;
+		Jsb context;
+		String value;
 
-        public Assignment(Jsb context, String value) {
-            this.context = context;
-            this.value = value;
-        }
+		public Assignment(Jsb context, String value) {
+			this.context = context;
+			this.value = value;
+		}
 
-        public Jsb to(String varName) {
-           return context.append(varName).append(" = ").append(value).appendLn(";");
-        }
-    }
+		public Jsb to(String varName) {
+			return context.append(varName).append(" = ").append(value).appendLn(";");
+		}
+	}
 
 
 }
