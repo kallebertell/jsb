@@ -7,9 +7,17 @@ public class JsStringBuilder {
 
 	private StringBuilder sb = new StringBuilder();
 
+	public JsStringBuilder append(Object o) {
+		return append(o.toString());
+	}
+
 	public JsStringBuilder append(CharSequence str) {
 		sb.append(str);
 		return this;
+	}
+
+	public JsStringBuilder prepend(Object o) {
+		return prepend(o.toString());
 	}
 
 	public JsStringBuilder prepend(CharSequence str) {
@@ -17,6 +25,13 @@ public class JsStringBuilder {
 		return this;
 	}
 
+	/** Appends a semicolon (;) */
+	public JsStringBuilder sc() {
+		sb.append(";");
+		return this;
+	}
+
+	/** Appends a new line */
 	public JsStringBuilder nl() {
 		sb.append("\n");
 		return this;
