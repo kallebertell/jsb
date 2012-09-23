@@ -78,12 +78,13 @@ public class Jsb {
 		return outerScope.append(this.end());
 	}
 
-	/** Appends anything to the  */
+	/** Appends to the currently built javascript string */
 	public Jsb append(String str) {
 		sb.append(str);
 		return this;
 	}
 
+	/** Appends to the currently built javascript string and adds a new line */
 	public Jsb appendLn(String str) {
 		sb.append(str).nl();
 		return this;
